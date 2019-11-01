@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Net.Mime;
+using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using WinTiler.LowLevel;
+using WinTiler.Overlay;
 using Application = System.Windows.Application;
-using Clipboard = System.Windows.Clipboard;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
-using MessageBox = System.Windows.MessageBox;
 
 namespace WinTiler
 {
@@ -44,11 +42,21 @@ namespace WinTiler
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("CLICK!");
-            MessageBox.Show("Do you want to close this window?",
-                "Confirmation",
-                MessageBoxButton.YesNo,
-                MessageBoxImage.Question);
+            var overlayWindow = new OverlayWindow();
+            new Thread(() =>
+            {
+                overlayWindow.Initialize();
+                overlayWindow.Run();
+            }){IsBackground = true}.Start();
+
+            new Thread(() =>
+            {
+                while (true)
+                {
+                    overlayWindow.Move();
+                    Thread.Sleep(100);
+                }
+            }){IsBackground = true}.Start();
         }
         
         protected override void OnStateChanged(EventArgs e)
