@@ -13,11 +13,6 @@
                 <Setter Property="Height" Value="50" />
                 <Setter Property="Background" Value="LightGray" />
                 <Setter Property="Margin" Value="2" />
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="Red" />
-                    </Trigger>
-                </Style.Triggers>
             </Style>
         </WrapPanel.Resources>
         <Button Click="ButtonBase_OnClick">Test</Button>
