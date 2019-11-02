@@ -1,4 +1,5 @@
 using System;
+using System.Windows.Forms;
 using GameOverlay.Drawing;
 using GameOverlay.Windows;
 
@@ -13,8 +14,11 @@ namespace WinTiler.Overlay
 
         public OverlayWindow()
         {
+            int width = Screen.PrimaryScreen.Bounds.Width;
+            int height = Screen.PrimaryScreen.Bounds.Height;
+
             // it is important to set the window to visible (and topmost) if you want to see it!
-            _window = new GameOverlay.Windows.OverlayWindow(0, 0, 800, 600)
+            _window = new GameOverlay.Windows.OverlayWindow(0, 0, width, height)
             {
                 IsTopmost = true,
                 IsVisible = true,
@@ -56,17 +60,32 @@ namespace WinTiler.Overlay
             _gray = _graphics.CreateSolidBrush(255, 144, 0, 100);
         }
 
+        private bool _isRunning = true;
         public void Run()
         {
-            var gfx = _graphics; // little shortcut
+            var abc = _graphics.CreateSolidBrush(99, 32, 123, 150);
 
-            while (true)
+            int i = 100;
+            while (_isRunning)
             {
-                gfx.BeginScene(); // call before you start any drawing
-                gfx.ClearScene(_gray); // set the background of the scene (can be transparent)
+                _graphics.BeginScene();
+                _graphics.ClearScene();
 
-                gfx.EndScene();
+                _graphics.FillRectangle(abc, i, i, i + 100, i + 100);
+
+                _graphics.EndScene();
+
+                i++;
             }
+
+            _graphics.BeginScene();
+            _graphics.ClearScene();
+            _graphics.EndScene();
+        }
+
+        public void Stop()
+        {
+            _isRunning = false;
         }
 
         private void _window_SizeChanged(object sender, OverlaySizeEventArgs e)
@@ -84,12 +103,6 @@ namespace WinTiler.Overlay
                 _graphics.Width = e.Width;
                 _graphics.Height = e.Height;
             }
-        }
-
-        public void Move()
-        {
-            _window.X += 1;
-            _window.Y += 1;
         }
     }
 }

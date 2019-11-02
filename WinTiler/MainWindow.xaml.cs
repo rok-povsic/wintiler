@@ -9,6 +9,7 @@ using System.Windows.Input;
 using WinTiler.LowLevel;
 using WinTiler.Overlay;
 using Application = System.Windows.Application;
+using Brushes = System.Windows.Media.Brushes;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 namespace WinTiler
@@ -18,6 +19,9 @@ namespace WinTiler
     /// </summary>
     public partial class MainWindow
     {
+        private Thread _overlayThread;
+        private OverlayWindow _overlayWindow;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -42,21 +46,22 @@ namespace WinTiler
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var overlayWindow = new OverlayWindow();
-            new Thread(() =>
-            {
-                overlayWindow.Initialize();
-                overlayWindow.Run();
-            }){IsBackground = true}.Start();
+            if (_overlayThread == null) {
+                _overlayWindow = new OverlayWindow();
 
-            new Thread(() =>
-            {
-                while (true)
+                _overlayThread = new Thread(() =>
                 {
-                    overlayWindow.Move();
-                    Thread.Sleep(100);
-                }
-            }){IsBackground = true}.Start();
+                    _overlayWindow.Initialize();
+                    _overlayWindow.Run();
+                }){IsBackground = true};
+
+                _overlayThread.Start();
+            }
+            else
+            {
+                _overlayWindow.Stop();
+                _overlayThread = null;
+            }
         }
         
         protected override void OnStateChanged(EventArgs e)
