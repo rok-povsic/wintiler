@@ -10,9 +10,11 @@ using WinTiler.LowLevel;
 using WinTiler.Overlay;
 using Application = System.Windows.Application;
 using Brushes = System.Windows.Media.Brushes;
+using DragEventArgs = System.Windows.DragEventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 using Label = System.Windows.Controls.Label;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 
 namespace WinTiler
 {
@@ -23,6 +25,8 @@ namespace WinTiler
     {
         private Thread _overlayThread;
         private OverlayWindow _overlayWindow;
+
+        private Label[,] _labels;
 
         public MainWindow()
         {
@@ -44,6 +48,15 @@ namespace WinTiler
                 this.Show();
                 this.WindowState = WindowState.Normal;
             };
+
+            _labels = new Label[4, 4];
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    _labels[i, j] = (Label) FindName($"Label{i + 1}{j + 1}");
+                }
+            }
         }
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
@@ -65,7 +78,7 @@ namespace WinTiler
                 _overlayThread = null;
             }
         }
-        
+
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == WindowState.Minimized)
@@ -93,6 +106,25 @@ namespace WinTiler
         {
             Label label = (Label) sender;
             label.Background = Brushes.Green;
+
+            int row = int.Parse(label.Name[5].ToString()) - 1;
+            int col = int.Parse(label.Name[6].ToString()) - 1;
+
+            Debug.WriteLine("the label: " + _labels[row, col].Name);
+        }
+
+        private void Label_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Label label = (Label) sender;
+            label.Background = Brushes.Wheat;
+        }
+
+        private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                Debug.WriteLine("mouse pressing: " + e.Source + " " + sender);
+            }
         }
     }
     

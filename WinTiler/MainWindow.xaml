@@ -29,25 +29,25 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.Column="0" Content="1 - 1" MouseDown="Label_OnMouseDown"/>
-            <Label Grid.Row="1" Grid.Column="0" Content="1 - 2" />
-            <Label Grid.Row="2" Grid.Column="0" Content="1 - 3" />
-            <Label Grid.Row="3" Grid.Column="0" Content="1 - 4" />
+            <Label Grid.Row="0" Grid.Column="0" Name="Label11" Content="1 - 1" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="1" Grid.Column="0" Name="Label12" Content="1 - 2" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="2" Grid.Column="0" Name="Label13" Content="1 - 3" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="3" Grid.Column="0" Name="Label14" Content="1 - 4" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
 
-            <Label Grid.Row="0" Grid.Column="1" Content="2 - 1" />
-            <Label Grid.Row="1" Grid.Column="1" Content="2 - 2" />
-            <Label Grid.Row="2" Grid.Column="1" Content="2 - 3" />
-            <Label Grid.Row="3" Grid.Column="1" Content="2 - 4" />
+            <Label Grid.Row="0" Grid.Column="1" Name="Label21" Content="2 - 1" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="1" Grid.Column="1" Name="Label22" Content="2 - 2" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="2" Grid.Column="1" Name="Label23" Content="2 - 3" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="3" Grid.Column="1" Name="Label24" Content="2 - 4" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
 
-            <Label Grid.Row="0" Grid.Column="2" Content="3 - 1" />
-            <Label Grid.Row="1" Grid.Column="2" Content="3 - 2" />
-            <Label Grid.Row="2" Grid.Column="2" Content="3 - 3" />
-            <Label Grid.Row="3" Grid.Column="2" Content="3 - 4" />
+            <Label Grid.Row="0" Grid.Column="2" Name="Label31" Content="3 - 1" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="1" Grid.Column="2" Name="Label32" Content="3 - 2" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="2" Grid.Column="2" Name="Label33" Content="3 - 3" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="3" Grid.Column="2" Name="Label34" Content="3 - 4" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
 
-            <Label Grid.Row="0" Grid.Column="3" Content="4 - 1" />
-            <Label Grid.Row="1" Grid.Column="3" Content="4 - 2" />
-            <Label Grid.Row="2" Grid.Column="3" Content="4 - 3" />
-            <Label Grid.Row="3" Grid.Column="3" Content="4 - 4" />
+            <Label Grid.Row="0" Grid.Column="3" Name="Label41" Content="4 - 1" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="1" Grid.Column="3" Name="Label42" Content="4 - 2" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="2" Grid.Column="3" Name="Label43" Content="4 - 3" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
+            <Label Grid.Row="3" Grid.Column="3" Name="Label44" Content="4 - 4" MouseDown="Label_OnMouseDown" MouseUp="Label_OnMouseUp" MouseEnter="UIElement_OnMouseEnter" />
         </Grid>
     </WrapPanel>
 </Window>
