@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -26,7 +27,10 @@ namespace WinTiler
         private Thread _overlayThread;
         private OverlayWindow _overlayWindow;
 
-        private Label[,] _labels;
+        private readonly Label[,] _labels;
+
+        private int _mouseDownRow = -1;
+        private int _mouseDownCol = -1;
 
         public MainWindow()
         {
@@ -105,26 +109,81 @@ namespace WinTiler
         private void Label_OnMouseDown(object sender, MouseButtonEventArgs e)
         {
             Label label = (Label) sender;
-            label.Background = Brushes.Green;
 
-            int row = int.Parse(label.Name[5].ToString()) - 1;
-            int col = int.Parse(label.Name[6].ToString()) - 1;
-
-            Debug.WriteLine("the label: " + _labels[row, col].Name);
+            _mouseDownRow = int.Parse(label.Name[5].ToString()) - 1;
+            _mouseDownCol = int.Parse(label.Name[6].ToString()) - 1;
         }
 
         private void Label_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            Label label = (Label) sender;
-            label.Background = Brushes.Wheat;
+            ClearLabelsColor();
+
+            _mouseDownRow = -1;
+            _mouseDownCol = -1;
         }
 
         private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                Debug.WriteLine("mouse pressing: " + e.Source + " " + sender);
+                Label label = (Label) sender;
+
+                int row = int.Parse(label.Name[5].ToString()) - 1;
+                int col = int.Parse(label.Name[6].ToString()) - 1;
+
+                Debug.WriteLine("OnMouseEnter: " + _labels[row, col].Name);
+
+                ClearLabelsColor();
+
+                foreach (Label foundLabel in LabelsInArea(row, col))
+                {
+                    foundLabel.Background = Brushes.Coral;
+                }
             }
+        }
+
+        private void ClearLabelsColor()
+        {
+            foreach (Label lbl in AllLabels())
+            {
+                lbl.Background = Brushes.LightGray;
+            }
+        }
+
+        private IEnumerable<Label> AllLabels()
+        {
+            for (int i = 0; i < 4; i++)
+            {
+                for (int j = 0; j < 4; j++)
+                {
+                    yield return _labels[i, j];
+                }
+            }
+        }
+
+        private List<Label> LabelsInArea(int currentRow, int currentCol)
+        {
+            var result = new List<Label>();
+            if (_mouseDownRow == -1 || _mouseDownCol == -1 )
+            {
+                return result;
+            }
+
+            int topRow = Math.Min(currentRow, _mouseDownRow);
+            int bottomRow = Math.Max(currentRow, _mouseDownRow);
+
+            int leftCol = Math.Min(currentCol, _mouseDownCol);
+            int rightCol = Math.Max(currentCol, _mouseDownCol);
+
+            for (int i = topRow; i <= bottomRow; i++)
+            {
+                for (int j = leftCol; j <= rightCol; j++)
+                {
+                    result.Add((Label) FindName($"Label{i + 1}{j + 1}"));
+                }
+            }
+
+            return result;
         }
     }
     
