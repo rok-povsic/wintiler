@@ -12,6 +12,8 @@ using Application = System.Windows.Application;
 using Brushes = System.Windows.Media.Brushes;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
+using Label = System.Windows.Controls.Label;
+
 namespace WinTiler
 {
     /// <summary>
@@ -85,6 +87,12 @@ namespace WinTiler
             {
                 this.Hide();
             }
+        }
+
+        private void Label_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            Label label = (Label) sender;
+            label.Background = Brushes.Green;
         }
     }
     
