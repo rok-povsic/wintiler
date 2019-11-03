@@ -112,11 +112,13 @@ namespace WinTiler
 
             _mouseDownRow = int.Parse(label.Name[5].ToString()) - 1;
             _mouseDownCol = int.Parse(label.Name[6].ToString()) - 1;
+
+            HighlightLabel(label);
         }
 
         private void Label_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ClearLabelsColor();
+            ClearLabels();
 
             _mouseDownRow = -1;
             _mouseDownCol = -1;
@@ -131,23 +133,31 @@ namespace WinTiler
                 int row = int.Parse(label.Name[5].ToString()) - 1;
                 int col = int.Parse(label.Name[6].ToString()) - 1;
 
-                Debug.WriteLine("OnMouseEnter: " + _labels[row, col].Name);
-
-                ClearLabelsColor();
+                ClearLabels();
 
                 foreach (Label foundLabel in LabelsInArea(row, col))
                 {
-                    foundLabel.Background = Brushes.Coral;
+                    HighlightLabel(foundLabel);
                 }
             }
         }
 
-        private void ClearLabelsColor()
+        private void ClearLabels()
         {
-            foreach (Label lbl in AllLabels())
+            foreach (Label label in AllLabels())
             {
-                lbl.Background = Brushes.LightGray;
+                ClearLabel(label);
             }
+        }
+
+        private void HighlightLabel(Label label)
+        {
+            label.Background = Brushes.Coral;
+        }
+
+        private void ClearLabel(Label label)
+        {
+            label.Background = Brushes.LightGray;
         }
 
         private IEnumerable<Label> AllLabels()
