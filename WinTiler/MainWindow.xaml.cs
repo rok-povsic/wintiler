@@ -6,6 +6,7 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
 using WinTiler.KeyboardShortcuts;
+using WinTiler.KeyboardShortcuts.LowLevel;
 using WinTiler.Overlay;
 using Application = System.Windows.Application;
 using Brushes = System.Windows.Media.Brushes;
@@ -131,8 +132,21 @@ namespace WinTiler
 
         private void Label_OnMouseUp(object sender, MouseButtonEventArgs e)
         {
-            ClearLabels();
+            Hide();
 
+            Label label = (Label) sender;
+
+            int currentCol = int.Parse(label.Name[5].ToString()) - 1;
+            int currentRow = int.Parse(label.Name[6].ToString()) - 1;
+
+            new WindowManipulation().SetForegroundPos(
+                LeftHighlightedCol(currentCol) * FullScreen.BoxWidth,
+                TopHighlighedRow(currentRow) * FullScreen.BoxHeight,
+                (RightHighlightedCol(currentCol) + 1) * FullScreen.BoxWidth,
+                (BottomHighlightedRow(currentRow) + 1) * FullScreen.BoxHeight
+            );
+
+            ClearLabels();
             _overlayWindow.Stop();
 
             _mouseDownRow = -1;

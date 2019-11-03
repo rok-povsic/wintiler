@@ -48,12 +48,16 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
             SetHwndPos(GetForegroundWindow(), x, y);
         }
 
+        public void SetForegroundPos(int left, int top, int right, int bottom)
+        {
+            SetHwndPosSize(GetForegroundWindow(), left, top, right - left, bottom - top);
+        }
+
         public void SetForegroundSize(int x, int y)
         {
             SetHwndSize(GetForegroundWindow(), x, y);
         }
-        
-        
+
         public void SetForegroundPosSize(int x, int y, int sizeX, int sizeY)
         {
             SetHwndPosSize(GetForegroundWindow(), x, y, sizeX, sizeY);
