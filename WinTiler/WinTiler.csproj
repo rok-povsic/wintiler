@@ -77,9 +77,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LowLevel\GlobalKeyboardHook.cs" />
-    <Compile Include="LowLevel\WindowManipulation.cs" />
-    <Compile Include="LowLevel\WpfScreen.cs" />
+    <Compile Include="KeyboardShortcuts\KeyboardHooks.cs" />
+    <Compile Include="KeyboardShortcuts\LowLevel\GlobalKeyboardHook.cs" />
+    <Compile Include="KeyboardShortcuts\LowLevel\WindowManipulation.cs" />
+    <Compile Include="KeyboardShortcuts\LowLevel\WpfScreen.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

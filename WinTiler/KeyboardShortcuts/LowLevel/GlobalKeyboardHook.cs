@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Input;
 
-namespace WinTiler.LowLevel
+namespace WinTiler.KeyboardShortcuts.LowLevel
 {
         class GlobalKeyboardHookEventArgs : HandledEventArgs
     {

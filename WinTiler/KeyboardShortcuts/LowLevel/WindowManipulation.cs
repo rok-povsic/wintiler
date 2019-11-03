@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace WinTiler.LowLevel
+namespace WinTiler.KeyboardShortcuts.LowLevel
 {
     public class WindowManipulation
     {

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Input;
-using WinTiler.LowLevel;
+using WinTiler.KeyboardShortcuts;
 using WinTiler.Overlay;
 using Application = System.Windows.Application;
 using Brushes = System.Windows.Media.Brushes;
-using DragEventArgs = System.Windows.DragEventArgs;
 using KeyEventArgs = System.Windows.Input.KeyEventArgs;
 
 using Label = System.Windows.Controls.Label;
@@ -35,7 +32,7 @@ namespace WinTiler
         {
             InitializeComponent();
             
-            new Controller(this).SetupKeyboardHooks();
+            new KeyboardHooks(this).Setup();
 
             var ni = new NotifyIcon
             {
@@ -208,103 +205,6 @@ namespace WinTiler
         private int RightHighlightedCol(int currentCol)
         {
             return Math.Max(currentCol, _mouseDownCol);
-        }
-    }
-    
-    internal class Controller : IDisposable
-    {
-        private readonly MainWindow _mainWindow;
-        private GlobalKeyboardHook _globalKeyboardHook;
-
-        public void SetupKeyboardHooks()
-        {
-            _globalKeyboardHook = new GlobalKeyboardHook();
-            _globalKeyboardHook.KeyboardPressed += OnKeyPressed;
-        }
-
-        public Controller(MainWindow mainWindow)
-        {
-            _mainWindow = mainWindow;
-        }
-
-        private void OnKeyPressed(object sender, GlobalKeyboardHookEventArgs e)
-        {
-//            if (!_registeredKeys.Contains(e.KeyboardData.Key)) 
-//                return;
-    
-            
-            if (e.KeyboardState != GlobalKeyboardHook.KeyboardState.SysKeyDown)
-                return;
-
-            if (GlobalKeyboardHook.WinAltPressed)
-            {
-                int virtualScreenWidth = (int) WpfScreen.Primary.WorkingArea.Width;
-                int virtualScreenHeight = (int) WpfScreen.Primary.WorkingArea.Height;
-
-                int width = virtualScreenWidth;
-                int height = virtualScreenHeight;
-
-                var win = new WindowManipulation();
-                if (e.KeyboardData.Key == Keys.I)
-                {
-                    Debug.WriteLine("Pressed win-alt-k");
-                    win.SetForegroundPosSize(width / 2, 0, width / 2, height / 2);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.U)
-                {
-                    Debug.WriteLine("Pressed win-alt-j");
-                    win.SetForegroundPosSize(0, 0, width / 2, height / 2);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.N)
-                {
-                    Debug.WriteLine("Pressed win-alt-n");
-                    win.SetForegroundPosSize(0, height / 2, width / 2, height / 2);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.M)
-                {
-                    Debug.WriteLine("Pressed win-alt-m");
-                    win.SetForegroundPosSize(width / 2, height / 2, width / 2, height / 2);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.J)
-                {
-                    Debug.WriteLine("Pressed win-alt-j");
-                    win.SetForegroundPosSize(width / 4, height / 4, width / 2, height / 2);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.K)
-                {
-                    Debug.WriteLine("Pressed win-alt-k");
-                    win.SetForegroundPosSize(width / 4, 0, width / 2, 3 * height / 4);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.H)
-                {
-                    Debug.WriteLine("Pressed win-alt-h");
-                    win.SetForegroundPosSize(0, 0, width / 2, 3 * height / 4);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.L)
-                {
-                    Debug.WriteLine("Pressed win-alt-l");
-                    win.SetForegroundPosSize(width / 2, 0, width / 2, 3 * height / 4);
-                    e.Handled = true;
-                }
-                else if (e.KeyboardData.Key == Keys.Enter)
-                {
-                    Debug.WriteLine("Pressed win-alt-enter");
-                    _mainWindow.Show();
-                    e.Handled = true;
-                }
-            }
-        }
-
-        public void Dispose()
-        {
-            _globalKeyboardHook?.Dispose();
         }
     }
 }

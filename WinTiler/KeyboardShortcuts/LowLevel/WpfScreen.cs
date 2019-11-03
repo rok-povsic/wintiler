@@ -6,7 +6,7 @@ using System.Windows.Forms;
 using System.Windows.Interop;
 using Point = System.Windows.Point;
 
-namespace WinTiler.LowLevel
+namespace WinTiler.KeyboardShortcuts.LowLevel
 {
     public class WpfScreen
     {
