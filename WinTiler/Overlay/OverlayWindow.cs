@@ -19,11 +19,8 @@ namespace WinTiler.Overlay
 
         public OverlayWindow()
         {
-            int width = Screen.PrimaryScreen.Bounds.Width;
-            int height = Screen.PrimaryScreen.Bounds.Height;
-
             // it is important to set the window to visible (and topmost) if you want to see it!
-            _window = new GameOverlay.Windows.OverlayWindow(0, 0, width, height)
+            _window = new GameOverlay.Windows.OverlayWindow(0, 0, FullScreen.ScreenWidth, FullScreen.ScreenHeight)
             {
                 IsTopmost = true,
                 IsVisible = true,

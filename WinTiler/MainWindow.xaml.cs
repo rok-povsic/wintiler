@@ -31,8 +31,6 @@ namespace WinTiler
         private int _mouseDownRow = -1;
         private int _mouseDownCol = -1;
 
-        private int FACTOR = 100;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -127,10 +125,10 @@ namespace WinTiler
             }
 
             _overlayWindow.Run(
-                LeftHighlightedCol(currentCol) * FACTOR,
-                TopHighlighedRow(currentRow) * FACTOR,
-                (RightHighlightedCol(currentCol) + 1) * FACTOR,
-                (BottomHighlightedRow(currentRow) + 1) * FACTOR
+                LeftHighlightedCol(currentCol) * FullScreen.BoxWidth,
+                TopHighlighedRow(currentRow) * FullScreen.BoxHeight,
+                (RightHighlightedCol(currentCol) + 1) * FullScreen.BoxWidth,
+                (BottomHighlightedRow(currentRow) + 1) * FullScreen.BoxHeight
             );
         }
 

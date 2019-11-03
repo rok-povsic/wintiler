@@ -86,6 +86,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Overlay\FullScreen.cs" />
     <Compile Include="Overlay\OverlayWindow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
