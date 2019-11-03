@@ -1,7 +1,7 @@
 using System;
+using System.Threading;
 using System.Windows.Forms;
 using GameOverlay.Drawing;
-using GameOverlay.Windows;
 
 namespace WinTiler.Overlay
 {
@@ -10,7 +10,12 @@ namespace WinTiler.Overlay
         private readonly GameOverlay.Windows.OverlayWindow _window;
         private readonly Graphics _graphics;
 
-        private SolidBrush _gray;
+        private bool _isDrawing = false;
+        private Thread _overlayThread;
+        private int _left;
+        private int _top;
+        private int _right;
+        private int _bottom;
 
         public OverlayWindow()
         {
@@ -23,9 +28,6 @@ namespace WinTiler.Overlay
                 IsTopmost = true,
                 IsVisible = true,
             };
-
-            // handle this event to resize your Graphics surface
-            _window.SizeChanged += _window_SizeChanged;
 
             // initialize a new Graphics object
             // set everything before you call _graphics.Setup()
@@ -56,53 +58,50 @@ namespace WinTiler.Overlay
 
             _graphics.WindowHandle = _window.Handle; // set the target handle before calling Setup()
             _graphics.Setup();
-
-            _gray = _graphics.CreateSolidBrush(255, 144, 0, 100);
         }
 
-        private bool _isRunning = true;
-        public void Run()
+        public void Run(int left, int top, int right, int bottom)
         {
-            var abc = _graphics.CreateSolidBrush(99, 32, 123, 150);
+            _left = left;
+            _top = top;
+            _right = right;
+            _bottom = bottom;
 
-            int i = 100;
-            while (_isRunning)
+            if (!_isDrawing)
             {
+                StartDrawing();
+            }
+        }
+
+        private void StartDrawing()
+        {
+            _isDrawing = true;
+
+            _overlayThread = new Thread(() =>
+            {
+                var brush = _graphics.CreateSolidBrush(99, 32, 123, 150);
+
+                while (_isDrawing)
+                {
+                    _graphics.BeginScene();
+                    _graphics.ClearScene();
+
+                    _graphics.FillRectangle(brush, _left, _top, _right, _bottom);
+
+                    _graphics.EndScene();
+                }
+
                 _graphics.BeginScene();
                 _graphics.ClearScene();
-
-                _graphics.FillRectangle(abc, i, i, i + 100, i + 100);
-
                 _graphics.EndScene();
+            }) {IsBackground = true};
 
-                i++;
-            }
-
-            _graphics.BeginScene();
-            _graphics.ClearScene();
-            _graphics.EndScene();
+            _overlayThread.Start();
         }
 
         public void Stop()
         {
-            _isRunning = false;
-        }
-
-        private void _window_SizeChanged(object sender, OverlaySizeEventArgs e)
-        {
-            if (_graphics == null) return;
-
-            if (_graphics.IsInitialized)
-            {
-                // after the Graphics surface is initialized you can only use the Resize method in order to enqueue a size change
-                _graphics.Resize(e.Width, e.Height);
-            }
-            else
-            {
-                // otherwise just set its members
-                _graphics.Width = e.Width;
-                _graphics.Height = e.Height;
-            }
+            _isDrawing = false;
         }
     }
 }

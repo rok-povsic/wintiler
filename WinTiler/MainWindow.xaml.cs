@@ -24,13 +24,14 @@ namespace WinTiler
     /// </summary>
     public partial class MainWindow
     {
-        private Thread _overlayThread;
         private OverlayWindow _overlayWindow;
 
         private readonly Label[,] _labels;
 
         private int _mouseDownRow = -1;
         private int _mouseDownCol = -1;
+
+        private int FACTOR = 100;
 
         public MainWindow()
         {
@@ -94,14 +95,7 @@ namespace WinTiler
             _mouseDownRow = int.Parse(label.Name[6].ToString()) - 1;
 
             HighlightLabel(label);
-        }
-
-        private void Label_OnMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            ClearLabels();
-
-            _mouseDownRow = -1;
-            _mouseDownCol = -1;
+            DrawOverlay(_mouseDownCol, _mouseDownRow);
         }
 
         private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
@@ -119,7 +113,35 @@ namespace WinTiler
                 {
                     HighlightLabel(foundLabel);
                 }
+
+                DrawOverlay(col, row);
             }
+        }
+
+        private void DrawOverlay(int currentCol, int currentRow)
+        {
+            if (_overlayWindow == null)
+            {
+                _overlayWindow = new OverlayWindow();
+                _overlayWindow.Initialize();
+            }
+
+            _overlayWindow.Run(
+                LeftHighlightedCol(currentCol) * FACTOR,
+                TopHighlighedRow(currentRow) * FACTOR,
+                (RightHighlightedCol(currentCol) + 1) * FACTOR,
+                (BottomHighlightedRow(currentRow) + 1) * FACTOR
+            );
+        }
+
+        private void Label_OnMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            ClearLabels();
+
+            _overlayWindow.Stop();
+
+            _mouseDownRow = -1;
+            _mouseDownCol = -1;
         }
 
         private void ClearLabels()
@@ -159,21 +181,35 @@ namespace WinTiler
                 return result;
             }
 
-            int topRow = Math.Min(currentRow, _mouseDownRow);
-            int bottomRow = Math.Max(currentRow, _mouseDownRow);
-
-            int leftCol = Math.Min(currentCol, _mouseDownCol);
-            int rightCol = Math.Max(currentCol, _mouseDownCol);
-
-            for (int i = leftCol; i <= rightCol; i++)
+            for (int i = LeftHighlightedCol(currentCol); i <= RightHighlightedCol(currentCol); i++)
             {
-                for (int j = topRow; j <= bottomRow; j++)
+                for (int j = TopHighlighedRow(currentRow); j <= BottomHighlightedRow(currentRow); j++)
                 {
                     result.Add((Label) FindName($"Label{i + 1}{j + 1}"));
                 }
             }
 
             return result;
+        }
+
+        private int TopHighlighedRow(int currentRow)
+        {
+            return Math.Min(currentRow, _mouseDownRow);
+        }
+
+        private int BottomHighlightedRow(int currentRow)
+        {
+            return Math.Max(currentRow, _mouseDownRow);
+        }
+
+        private int LeftHighlightedCol(int currentCol)
+        {
+            return Math.Min(currentCol, _mouseDownCol);
+        }
+
+        private int RightHighlightedCol(int currentCol)
+        {
+            return Math.Max(currentCol, _mouseDownCol);
         }
     }
     
