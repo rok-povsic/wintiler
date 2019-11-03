@@ -15,7 +15,6 @@
                 <Setter Property="Margin" Value="2" />
             </Style>
         </WrapPanel.Resources>
-        <Button Click="ButtonBase_OnClick">Test</Button>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto" />

@@ -63,26 +63,6 @@ namespace WinTiler
             }
         }
 
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            if (_overlayThread == null) {
-                _overlayWindow = new OverlayWindow();
-
-                _overlayThread = new Thread(() =>
-                {
-                    _overlayWindow.Initialize();
-                    _overlayWindow.Run();
-                }){IsBackground = true};
-
-                _overlayThread.Start();
-            }
-            else
-            {
-                _overlayWindow.Stop();
-                _overlayThread = null;
-            }
-        }
-
         protected override void OnStateChanged(EventArgs e)
         {
             if (WindowState == WindowState.Minimized)
