@@ -1,4 +1,4 @@
-using System.Windows.Forms;
+using System.Windows;
 
 namespace WinTiler.Overlay
 {
@@ -6,8 +6,8 @@ namespace WinTiler.Overlay
     {
         private static int NUM_OF_BOXES = 4;
 
-        public static int ScreenWidth => Screen.PrimaryScreen.Bounds.Width;
-        public static int ScreenHeight => Screen.PrimaryScreen.Bounds.Height;
+        public static int ScreenWidth => (int)SystemParameters.WorkArea.Width;
+        public static int ScreenHeight => (int)SystemParameters.WorkArea.Height;
 
         public static int BoxWidth => ScreenWidth / NUM_OF_BOXES;
         public static int BoxHeight => ScreenHeight / NUM_OF_BOXES;
