@@ -110,8 +110,8 @@ namespace WinTiler
         {
             Label label = (Label) sender;
 
-            _mouseDownRow = int.Parse(label.Name[5].ToString()) - 1;
-            _mouseDownCol = int.Parse(label.Name[6].ToString()) - 1;
+            _mouseDownCol = int.Parse(label.Name[5].ToString()) - 1;
+            _mouseDownRow = int.Parse(label.Name[6].ToString()) - 1;
 
             HighlightLabel(label);
         }
@@ -130,8 +130,8 @@ namespace WinTiler
             {
                 Label label = (Label) sender;
 
-                int row = int.Parse(label.Name[5].ToString()) - 1;
-                int col = int.Parse(label.Name[6].ToString()) - 1;
+                int col = int.Parse(label.Name[5].ToString()) - 1;
+                int row = int.Parse(label.Name[6].ToString()) - 1;
 
                 ClearLabels();
 
@@ -185,9 +185,9 @@ namespace WinTiler
             int leftCol = Math.Min(currentCol, _mouseDownCol);
             int rightCol = Math.Max(currentCol, _mouseDownCol);
 
-            for (int i = topRow; i <= bottomRow; i++)
+            for (int i = leftCol; i <= rightCol; i++)
             {
-                for (int j = leftCol; j <= rightCol; j++)
+                for (int j = topRow; j <= bottomRow; j++)
                 {
                     result.Add((Label) FindName($"Label{i + 1}{j + 1}"));
                 }
