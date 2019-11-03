@@ -1,3 +1,5 @@
+<img src="WinTiler/Main.ico" alt="Logo" title="WinTiler Logo" width="80" >
+
 # WinTiler
 
 WinTiler is a program allowing keyboard-driven window size/location manipulation on Windows. It resembles
