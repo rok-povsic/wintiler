@@ -253,7 +253,31 @@ namespace WinTiler
         private void Window_OnKeyDown(object sender, KeyEventArgs e)
         {
             bool marking = false;
-            if (e.Key == Key.Left)
+            if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
+            {
+                _keyboardRight -= 1;
+
+                marking = true;
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
+            {
+                _keyboardRight += 1;
+
+                marking = true;
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
+            {
+                _keyboardBottom -= 1;
+
+                marking = true;
+            }
+            else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
+            {
+                _keyboardBottom += 1;
+
+                marking = true;
+            }
+            else if (e.Key == Key.Left)
             {
                 _keyboardLeft -= 1;
                 _keyboardRight -= 1;
