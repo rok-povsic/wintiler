@@ -29,10 +29,15 @@ namespace WinTiler
         private int _mouseDownRow = -1;
         private int _mouseDownCol = -1;
 
+        private int _keyboardLeft = 0;
+        private int _keyboardTop = 0;
+        private int _keyboardRight = 0;
+        private int _keyboardBottom = 0;
+
         public MainWindow()
         {
             InitializeComponent();
-            
+
             new KeyboardHooks(this).Setup();
 
             var ni = new NotifyIcon
@@ -44,7 +49,7 @@ namespace WinTiler
                     new MenuItem("Quit", (sender, args) => { Application.Current.Shutdown(); })
                 }),
             };
-            ni.DoubleClick += (object sender, EventArgs args) => 
+            ni.DoubleClick += (object sender, EventArgs args) =>
             {
                 this.Show();
                 this.WindowState = WindowState.Normal;
@@ -91,7 +96,7 @@ namespace WinTiler
             _mouseDownRow = int.Parse(label.Name[6].ToString()) - 1;
 
             HighlightLabel(label);
-            DrawOverlay(_mouseDownCol, _mouseDownRow);
+            DrawOverlay(_mouseDownCol, _mouseDownRow, _mouseDownCol, _mouseDownRow);
         }
 
         private void UIElement_OnMouseEnter(object sender, MouseEventArgs e)
@@ -105,16 +110,35 @@ namespace WinTiler
 
                 ClearLabels();
 
-                foreach (Label foundLabel in LabelsInArea(row, col))
+                if (_mouseDownRow == -1 || _mouseDownCol == -1 )
                 {
-                    HighlightLabel(foundLabel);
+                    return;
                 }
 
-                DrawOverlay(col, row);
+                int left = LeftHighlightedCol(col);
+                int right = RightHighlightedCol(col);
+                int top = TopHighlighedRow(row);
+                int bottom = BottomHighlightedRow(row);
+
+                Mark(top, right, bottom, left);
             }
         }
 
-        private void DrawOverlay(int currentCol, int currentRow)
+        private void Mark(int top, int right, int bottom, int left)
+        {
+            List<Label> labels = LabelsInArea(top, right, bottom, left);
+
+            ClearLabels();
+
+            foreach (Label foundLabel in labels)
+            {
+                HighlightLabel(foundLabel);
+            }
+
+            DrawOverlay(top, right, bottom, left);
+        }
+
+        private void DrawOverlay(int top, int right, int bottom, int left)
         {
             if (_overlayWindow == null)
             {
@@ -123,10 +147,10 @@ namespace WinTiler
             }
 
             _overlayWindow.Run(
-                LeftHighlightedCol(currentCol) * FullScreen.BoxWidth,
-                TopHighlighedRow(currentRow) * FullScreen.BoxHeight,
-                (RightHighlightedCol(currentCol) + 1) * FullScreen.BoxWidth,
-                (BottomHighlightedRow(currentRow) + 1) * FullScreen.BoxHeight
+                left * FullScreen.BoxWidth,
+                top * FullScreen.BoxHeight,
+                (right + 1) * FullScreen.BoxWidth,
+                (bottom + 1) * FullScreen.BoxHeight
             );
         }
 
@@ -139,11 +163,16 @@ namespace WinTiler
             int currentCol = int.Parse(label.Name[5].ToString()) - 1;
             int currentRow = int.Parse(label.Name[6].ToString()) - 1;
 
+            int leftHighlightedCol = LeftHighlightedCol(currentCol);
+            int topHighlighedRow = TopHighlighedRow(currentRow);
+            int rightHighlightedCol = RightHighlightedCol(currentCol);
+            int bottomHighlightedRow = BottomHighlightedRow(currentRow);
+
             new WindowManipulation().SetForegroundPos(
-                LeftHighlightedCol(currentCol) * FullScreen.BoxWidth,
-                TopHighlighedRow(currentRow) * FullScreen.BoxHeight,
-                (RightHighlightedCol(currentCol) + 1) * FullScreen.BoxWidth,
-                (BottomHighlightedRow(currentRow) + 1) * FullScreen.BoxHeight
+                leftHighlightedCol * FullScreen.BoxWidth,
+                topHighlighedRow * FullScreen.BoxHeight,
+                (rightHighlightedCol + 1) * FullScreen.BoxWidth,
+                (bottomHighlightedRow + 1) * FullScreen.BoxHeight
             );
 
             ClearLabels();
@@ -182,17 +211,17 @@ namespace WinTiler
             }
         }
 
-        private List<Label> LabelsInArea(int currentRow, int currentCol)
+        private List<Label> LabelsInArea(int top, int right, int bottom, int left)
+        {
+            return GetLabelsInRectangle(top, right, bottom, left);
+        }
+
+        private List<Label> GetLabelsInRectangle(int top, int right, int bottom, int left)
         {
             var result = new List<Label>();
-            if (_mouseDownRow == -1 || _mouseDownCol == -1 )
+            for (int i = left; i <= right; i++)
             {
-                return result;
-            }
-
-            for (int i = LeftHighlightedCol(currentCol); i <= RightHighlightedCol(currentCol); i++)
-            {
-                for (int j = TopHighlighedRow(currentRow); j <= BottomHighlightedRow(currentRow); j++)
+                for (int j = top; j <= bottom; j++)
                 {
                     result.Add((Label) FindName($"Label{i + 1}{j + 1}"));
                 }
@@ -219,6 +248,58 @@ namespace WinTiler
         private int RightHighlightedCol(int currentCol)
         {
             return Math.Max(currentCol, _mouseDownCol);
+        }
+
+        private void Window_OnKeyDown(object sender, KeyEventArgs e)
+        {
+            bool marking = false;
+            if (e.Key == Key.Left)
+            {
+                _keyboardLeft -= 1;
+                _keyboardRight -= 1;
+
+                marking = true;
+            }
+            else if (e.Key == Key.Right)
+            {
+                _keyboardLeft += 1;
+                _keyboardRight += 1;
+
+                marking = true;
+            }
+            else if (e.Key == Key.Up)
+            {
+                _keyboardTop -= 1;
+                _keyboardBottom -= 1;
+
+                marking = true;
+            }
+            else if (e.Key == Key.Down)
+            {
+                _keyboardTop += 1;
+                _keyboardBottom += 1;
+
+                marking = true;
+            }
+            else if (e.Key == Key.Enter)
+            {
+                Hide();
+
+                new WindowManipulation().SetForegroundPos(
+                    _keyboardLeft * FullScreen.BoxWidth,
+                    _keyboardTop * FullScreen.BoxHeight,
+                    (_keyboardRight + 1) * FullScreen.BoxWidth,
+                    (_keyboardBottom + 1) * FullScreen.BoxHeight
+                );
+
+                ClearLabels();
+                _overlayWindow.Stop();
+            }
+
+            if (marking)
+            {
+                Mark(_keyboardTop, _keyboardRight, _keyboardBottom, _keyboardLeft);
+            }
         }
     }
 }

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WinTiler"
         mc:Ignorable="d"
-        Title="WinTiler" Height="255" Width="232">
+        Title="WinTiler" Height="255" Width="232"
+        KeyDown="Window_OnKeyDown">
     <WrapPanel Orientation="Vertical">
         <WrapPanel.Resources>
             <Style TargetType="Label">
