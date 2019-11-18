@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using WinTiler.KeyboardShortcuts.LowLevel;
+using WinTiler.Overlay;
 
 namespace WinTiler.KeyboardShortcuts
 {
@@ -27,11 +28,8 @@ namespace WinTiler.KeyboardShortcuts
 
             if (GlobalKeyboardHook.WinAltPressed)
             {
-                int virtualScreenWidth = (int) WpfScreen.Primary.WorkingArea.Width;
-                int virtualScreenHeight = (int) WpfScreen.Primary.WorkingArea.Height;
-
-                int width = virtualScreenWidth;
-                int height = virtualScreenHeight;
+                int width = FullScreen.ScreenWidth;
+                int height = FullScreen.ScreenHeight;
 
                 var win = new WindowManipulation();
                 switch (e.KeyboardData.Key)
