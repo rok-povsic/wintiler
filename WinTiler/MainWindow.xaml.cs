@@ -63,6 +63,8 @@ namespace WinTiler
                     _labels[i, j] = (Label) FindName($"Label{i + 1}{j + 1}");
                 }
             }
+
+            HighlightLabels(_keyboardTop, _keyboardRight, _keyboardBottom, _keyboardLeft);
         }
 
         protected override void OnStateChanged(EventArgs e)
@@ -126,6 +128,12 @@ namespace WinTiler
 
         private void Mark(int top, int right, int bottom, int left)
         {
+            HighlightLabels(top, right, bottom, left);
+            DrawOverlay(top, right, bottom, left);
+        }
+
+        private void HighlightLabels(int top, int right, int bottom, int left)
+        {
             List<Label> labels = LabelsInArea(top, right, bottom, left);
 
             ClearLabels();
@@ -134,8 +142,6 @@ namespace WinTiler
             {
                 HighlightLabel(foundLabel);
             }
-
-            DrawOverlay(top, right, bottom, left);
         }
 
         private void DrawOverlay(int top, int right, int bottom, int left)
