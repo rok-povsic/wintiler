@@ -5,7 +5,7 @@ namespace WinTiler.Overlay
 {
     public class FullScreen
     {
-        private static int NUM_OF_BOXES = 4;
+        internal static int NUM_OF_BOXES = 4;
 
         public static int ScreenWidth => (int)WpfScreen.Primary.WorkingArea.Width;
         public static int ScreenHeight => (int)WpfScreen.Primary.WorkingArea.Height;

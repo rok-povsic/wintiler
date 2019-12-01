@@ -27,7 +27,19 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
         
         [DllImport("user32.dll")]
         private static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, uint uFlags);
-        
+
+        [DllImport("user32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetWindowRect(IntPtr hWnd, ref Rect lpRect);
+        [StructLayout(LayoutKind.Sequential)]
+        public struct Rect
+        {
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
+        }
+
         public static bool SetHwndPos(IntPtr hwnd, int x, int y)
         {
             return SetWindowPos(hwnd, IntPtr.Zero, x, y, 0, 0, 5);
@@ -61,6 +73,13 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
         public void SetForegroundPosSize(int x, int y, int sizeX, int sizeY)
         {
             SetHwndPosSize(GetForegroundWindow(), x, y, sizeX, sizeY);
+        }
+
+        public Rect GetForegroundRect()
+        {
+            var rct = new Rect();
+            GetWindowRect(GetForegroundWindow(), ref rct);
+            return rct;
         }
     }
 }

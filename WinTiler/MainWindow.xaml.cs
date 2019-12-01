@@ -34,8 +34,12 @@ namespace WinTiler
         private int _keyboardRight = 0;
         private int _keyboardBottom = 0;
 
+        private readonly WindowManipulation _windowManipulation = new WindowManipulation();
+
         public MainWindow()
         {
+            WindowManipulation.Rect rect = _windowManipulation.GetForegroundRect();
+
             InitializeComponent();
 
             new KeyboardHooks(this).Setup();
@@ -63,6 +67,11 @@ namespace WinTiler
                     _labels[i, j] = (Label) FindName($"Label{i + 1}{j + 1}");
                 }
             }
+
+            _keyboardTop = (int) Math.Round((double) rect.Top / FullScreen.ScreenHeight * FullScreen.NUM_OF_BOXES);
+            _keyboardRight = (int) Math.Round((double) rect.Right / FullScreen.ScreenWidth * (FullScreen.NUM_OF_BOXES - 1));
+            _keyboardBottom = (int) Math.Round((double) rect.Bottom / FullScreen.ScreenHeight * (FullScreen.NUM_OF_BOXES - 1));
+            _keyboardLeft = (int) Math.Round((double) rect.Left / FullScreen.ScreenWidth * FullScreen.NUM_OF_BOXES);
 
             HighlightLabels(_keyboardTop, _keyboardRight, _keyboardBottom, _keyboardLeft);
         }
@@ -315,7 +324,7 @@ namespace WinTiler
             {
                 Hide();
 
-                new WindowManipulation().SetForegroundPos(
+                _windowManipulation.SetForegroundPos(
                     _keyboardLeft * FullScreen.BoxWidth,
                     _keyboardTop * FullScreen.BoxHeight,
                     (_keyboardRight + 1) * FullScreen.BoxWidth,
