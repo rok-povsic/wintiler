@@ -270,30 +270,40 @@ namespace WinTiler
             bool marking = false;
             if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Left)
             {
+                if (_keyboardRight - _keyboardLeft == 0) return;
+
                 _keyboardRight -= 1;
 
                 marking = true;
             }
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Right)
             {
+                if (_keyboardRight + 1 == FullScreen.NUM_OF_BOXES) return;
+
                 _keyboardRight += 1;
 
                 marking = true;
             }
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Up)
             {
+                if (_keyboardBottom - _keyboardTop == 0) return;
+
                 _keyboardBottom -= 1;
 
                 marking = true;
             }
             else if (Keyboard.IsKeyDown(Key.LeftShift) && e.Key == Key.Down)
             {
+                if (_keyboardBottom + 1 == FullScreen.NUM_OF_BOXES) return;
+
                 _keyboardBottom += 1;
 
                 marking = true;
             }
             else if (e.Key == Key.Left)
             {
+                if (_keyboardLeft == 0) return;
+
                 _keyboardLeft -= 1;
                 _keyboardRight -= 1;
 
@@ -301,6 +311,8 @@ namespace WinTiler
             }
             else if (e.Key == Key.Right)
             {
+                if (_keyboardRight + 1 == FullScreen.NUM_OF_BOXES) return;
+
                 _keyboardLeft += 1;
                 _keyboardRight += 1;
 
@@ -308,6 +320,8 @@ namespace WinTiler
             }
             else if (e.Key == Key.Up)
             {
+                if (_keyboardTop == 0) return;
+
                 _keyboardTop -= 1;
                 _keyboardBottom -= 1;
 
@@ -315,6 +329,8 @@ namespace WinTiler
             }
             else if (e.Key == Key.Down)
             {
+                if (_keyboardBottom + 1 == FullScreen.NUM_OF_BOXES) return;
+
                 _keyboardTop += 1;
                 _keyboardBottom += 1;
 
