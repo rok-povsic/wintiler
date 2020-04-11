@@ -190,15 +190,15 @@ namespace WinTiler
             int currentRow = int.Parse(label.Name[6].ToString()) - 1;
 
             int leftHighlightedCol = LeftHighlightedCol(currentCol);
-            int topHighlighedRow = TopHighlighedRow(currentRow);
+            int topHighlightedRow = TopHighlighedRow(currentRow);
             int rightHighlightedCol = RightHighlightedCol(currentCol);
             int bottomHighlightedRow = BottomHighlightedRow(currentRow);
 
-            new WindowManipulation().SetForegroundPos(
-                leftHighlightedCol * FullScreen.BoxWidth,
-                topHighlighedRow * FullScreen.BoxHeight,
-                (rightHighlightedCol + 1) * FullScreen.BoxWidth,
-                (bottomHighlightedRow + 1) * FullScreen.BoxHeight
+            _windowManipulation.PlaceWindow(
+                leftHighlightedCol,
+                topHighlightedRow,
+                rightHighlightedCol,
+                bottomHighlightedRow
             );
 
             ClearLabels();
@@ -351,25 +351,7 @@ namespace WinTiler
             {
                 Hide();
 
-                if (
-                    _keyboardLeft == 0 &&
-                    _keyboardTop == 0 &&
-                    _keyboardBottom == FullScreen.NUM_OF_BOXES - 1 &&
-                    _keyboardRight == FullScreen.NUM_OF_BOXES - 1
-                )
-                {
-                    _windowManipulation.Maximize();
-                }
-                else
-                {
-                    _windowManipulation.Restore();
-                    _windowManipulation.SetForegroundPos(
-                        _keyboardLeft * FullScreen.BoxWidth,
-                        _keyboardTop * FullScreen.BoxHeight,
-                        (_keyboardRight + 1) * FullScreen.BoxWidth,
-                        (_keyboardBottom + 1) * FullScreen.BoxHeight
-                    );
-                }
+                _windowManipulation.PlaceWindow(_keyboardLeft, _keyboardTop, _keyboardRight, _keyboardBottom);
 
                 ClearLabels();
                 _overlayWindow.Stop();

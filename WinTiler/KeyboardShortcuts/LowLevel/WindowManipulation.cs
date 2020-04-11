@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using WinTiler.Overlay;
 
 namespace WinTiler.KeyboardShortcuts.LowLevel
 {
@@ -47,7 +48,7 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
 
-        public static bool SetHwndPos(IntPtr hwnd, int x, int y)
+        private static bool SetHwndPos(IntPtr hwnd, int x, int y)
         {
             return SetWindowPos(hwnd, IntPtr.Zero, x, y, 0, 0, 5);
         }
@@ -56,30 +57,15 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
         {
             return SetWindowPos(hwnd, IntPtr.Zero, 0, 0, w, h, 6);
         }
-        
-        public static bool SetHwndPosSize(IntPtr hwnd, int x, int y, int w, int h)
+
+        private static bool SetHwndPosSize(IntPtr hwnd, int x, int y, int w, int h)
         {
             return SetWindowPos(hwnd, IntPtr.Zero, x, y, w, h, 4);
         }
 
-        public void SetForegroundPos(int x, int y)
-        {
-            SetHwndPos(GetForegroundWindow(), x, y);
-        }
-
-        public void SetForegroundPos(int left, int top, int right, int bottom)
+        private void SetForegroundPos(int left, int top, int right, int bottom)
         {
             SetHwndPosSize(GetForegroundWindow(), left, top, right - left, bottom - top);
-        }
-
-        public void SetForegroundSize(int x, int y)
-        {
-            SetHwndSize(GetForegroundWindow(), x, y);
-        }
-
-        public void SetForegroundPosSize(int x, int y, int sizeX, int sizeY)
-        {
-            SetHwndPosSize(GetForegroundWindow(), x, y, sizeX, sizeY);
         }
 
         public Rect GetForegroundRect()
@@ -92,7 +78,7 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
         /**
          * Maximizes the window.
          */
-        public void Maximize()
+        private void Maximize()
         {
             ShowWindow(GetForegroundWindow(), SW_MAXIMIZE);
         }
@@ -100,9 +86,32 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
         /**
          * If the window is maximized, it restores it to the previous position.
          */
-        public void Restore()
+        private void Restore()
         {
             ShowWindow(GetForegroundWindow(), SW_RESTORE);
+        }
+
+        public void PlaceWindow(int left, int top, int right, int bottom)
+        {
+            if (
+                left == 0 &&
+                top == 0 &&
+                right == FullScreen.NUM_OF_BOXES - 1 &&
+                bottom == FullScreen.NUM_OF_BOXES - 1
+            )
+            {
+                Maximize();
+            }
+            else
+            {
+                Restore();
+                SetForegroundPos(
+                    left * FullScreen.BoxWidth,
+                    top * FullScreen.BoxHeight,
+                    (right + 1) * FullScreen.BoxWidth,
+                    (bottom + 1) * FullScreen.BoxHeight
+                );
+            }
         }
     }
 }

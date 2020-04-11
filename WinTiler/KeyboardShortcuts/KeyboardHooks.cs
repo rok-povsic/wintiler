@@ -26,57 +26,54 @@ namespace WinTiler.KeyboardShortcuts
             if (!(e.KeyboardState == GlobalKeyboardHook.KeyboardState.SysKeyDown && GlobalKeyboardHook.WinAltPressed))
                 return;
 
-            int width = FullScreen.ScreenWidth;
-            int height = FullScreen.ScreenHeight;
-
             var win = new WindowManipulation();
             switch (e.KeyboardData.Key)
             {
                 case Keys.I:
                 {
-                    win.SetForegroundPosSize(width / 2, 0, width / 2, height / 2);
+                    win.PlaceWindow(2, 0, 3, 1);
                     e.Handled = true;
                     break;
                 }
                 case Keys.U:
                 {
-                    win.SetForegroundPosSize(0, 0, width / 2, height / 2);
+                    win.PlaceWindow(0, 0, 1, 1);
                     e.Handled = true;
                     break;
                 }
                 case Keys.N:
                 {
-                    win.SetForegroundPosSize(0, height / 2, width / 2, height / 2);
+                    win.PlaceWindow(0, 2, 1, 3);
                     e.Handled = true;
                     break;
                 }
                 case Keys.M:
                 {
-                    win.SetForegroundPosSize(width / 2, height / 2, width / 2, height / 2);
+                    win.PlaceWindow(2, 2, 3, 3);
                     e.Handled = true;
                     break;
                 }
                 case Keys.J:
                 {
-                    win.SetForegroundPosSize(width / 4, height / 4, width / 2, height / 2);
+                    win.PlaceWindow(1, 1, 2, 2);
                     e.Handled = true;
                     break;
                 }
                 case Keys.K:
                 {
-                    win.SetForegroundPosSize(width / 4, 0, width / 2, 3 * height / 4);
+                    win.PlaceWindow(1, 0, 2, 2);
                     e.Handled = true;
                     break;
                 }
                 case Keys.H:
                 {
-                    win.SetForegroundPosSize(0, 0, width / 2, 3 * height / 4);
+                    win.PlaceWindow(0, 0, 2, 2);
                     e.Handled = true;
                     break;
                 }
                 case Keys.L:
                 {
-                    win.SetForegroundPosSize(width / 2, 0, width / 2, 3 * height / 4);
+                    win.PlaceWindow(2, 0, 3, 2);
                     e.Handled = true;
                     break;
                 }
