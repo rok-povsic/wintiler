@@ -82,6 +82,7 @@ namespace WinTiler.KeyboardShortcuts
                 }
                 case Keys.Enter:
                 {
+                    _mainWindow.DetectWindowSize();
                     _mainWindow.Show();
                     e.Handled = true;
                     break;
