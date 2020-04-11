@@ -79,6 +79,11 @@ namespace WinTiler
             _keyboardBottom = (int) Math.Round((double) rect.Bottom / FullScreen.ScreenHeight * FullScreen.NUM_OF_BOXES) - 1;
             _keyboardLeft = (int) Math.Round((double) rect.Left / FullScreen.ScreenWidth * FullScreen.NUM_OF_BOXES);
 
+            if (_keyboardLeft < 0) _keyboardLeft = 0;
+            if (_keyboardTop < 0) _keyboardTop = 0;
+            if (_keyboardRight >= FullScreen.NUM_OF_BOXES) _keyboardRight = FullScreen.NUM_OF_BOXES - 1;
+            if (_keyboardBottom >= FullScreen.NUM_OF_BOXES) _keyboardBottom = FullScreen.NUM_OF_BOXES - 1;
+
             HighlightLabels(_keyboardTop, _keyboardRight, _keyboardBottom, _keyboardLeft);
         }
 
