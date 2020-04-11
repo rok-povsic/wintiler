@@ -59,10 +59,10 @@ namespace WinTiler
                 this.WindowState = WindowState.Normal;
             };
 
-            _labels = new Label[4, 4];
-            for (int i = 0; i < 4; i++)
+            _labels = new Label[FullScreen.NUM_OF_BOXES, FullScreen.NUM_OF_BOXES];
+            for (int i = 0; i < FullScreen.NUM_OF_BOXES; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < FullScreen.NUM_OF_BOXES; j++)
                 {
                     _labels[i, j] = (Label) FindName($"Label{i + 1}{j + 1}");
                 }
@@ -217,9 +217,9 @@ namespace WinTiler
 
         private IEnumerable<Label> AllLabels()
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < FullScreen.NUM_OF_BOXES; i++)
             {
-                for (int j = 0; j < 4; j++)
+                for (int j = 0; j < FullScreen.NUM_OF_BOXES; j++)
                 {
                     yield return _labels[i, j];
                 }
