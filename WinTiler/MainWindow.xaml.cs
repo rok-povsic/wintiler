@@ -340,12 +340,25 @@ namespace WinTiler
             {
                 Hide();
 
-                _windowManipulation.SetForegroundPos(
-                    _keyboardLeft * FullScreen.BoxWidth,
-                    _keyboardTop * FullScreen.BoxHeight,
-                    (_keyboardRight + 1) * FullScreen.BoxWidth,
-                    (_keyboardBottom + 1) * FullScreen.BoxHeight
-                );
+                if (
+                    _keyboardLeft == 0 &&
+                    _keyboardTop == 0 &&
+                    _keyboardBottom == FullScreen.NUM_OF_BOXES - 1 &&
+                    _keyboardRight == FullScreen.NUM_OF_BOXES - 1
+                )
+                {
+                    _windowManipulation.Maximize();
+                }
+                else
+                {
+                    _windowManipulation.Restore();
+                    _windowManipulation.SetForegroundPos(
+                        _keyboardLeft * FullScreen.BoxWidth,
+                        _keyboardTop * FullScreen.BoxHeight,
+                        (_keyboardRight + 1) * FullScreen.BoxWidth,
+                        (_keyboardBottom + 1) * FullScreen.BoxHeight
+                    );
+                }
 
                 ClearLabels();
                 _overlayWindow.Stop();

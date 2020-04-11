@@ -40,6 +40,13 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
             public int Bottom;
         }
 
+        // Other commands: https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+        private const int SW_MAXIMIZE = 3;
+        private const int SW_RESTORE = 9;
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
         public static bool SetHwndPos(IntPtr hwnd, int x, int y)
         {
             return SetWindowPos(hwnd, IntPtr.Zero, x, y, 0, 0, 5);
@@ -80,6 +87,22 @@ namespace WinTiler.KeyboardShortcuts.LowLevel
             var rct = new Rect();
             GetWindowRect(GetForegroundWindow(), ref rct);
             return rct;
+        }
+
+        /**
+         * Maximizes the window.
+         */
+        public void Maximize()
+        {
+            ShowWindow(GetForegroundWindow(), SW_MAXIMIZE);
+        }
+
+        /**
+         * If the window is maximized, it restores it to the previous position.
+         */
+        public void Restore()
+        {
+            ShowWindow(GetForegroundWindow(), SW_RESTORE);
         }
     }
 }
